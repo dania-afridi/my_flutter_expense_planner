@@ -1,5 +1,6 @@
 import '../models/transactions.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Chart extends StatelessWidget {
   //const Chart({super.key});
@@ -10,7 +11,23 @@ class Chart extends StatelessWidget {
 
   List<Map<String, Object>> get weeklyTransactionValues {
     return List.generate(7, (index) {
-      return {'day': 'T', 'amount': 9.99};
+      final weekDay = DateTime.now().subtract(
+        Duration(days: index),
+      );
+
+      var totalAmount = 0.0;
+
+      for (var i = 0; i < recentTransactions.length; i++) {
+        if (recentTransactions[i].date.day == weekDay.day &&
+            recentTransactions[i].date.month == weekDay.month &&
+            recentTransactions[i].date.year == weekDay.year) {
+          totalAmount += recentTransactions[i].amount!;
+        }
+      }
+
+      print(weekDay);
+
+      return {'day': DateFormat.E(weekDay), 'amount': totalAmount};
     });
   }
 
