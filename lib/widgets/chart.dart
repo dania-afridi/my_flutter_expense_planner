@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, avoid_print, prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import '../models/transactions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -25,19 +27,25 @@ class Chart extends StatelessWidget {
         }
       }
 
-      print(weekDay);
+      print(DateFormat.E().format(weekDay));
 
-      return {'day': DateFormat.E(weekDay), 'amount': totalAmount};
+      return {
+        'day': DateFormat.E().format(weekDay).substring(0, 1),
+        'amount': totalAmount
+      };
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print(weeklyTransactionValues);
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),
       child: Row(
-        children: <Widget>[],
+        children: weeklyTransactionValues.map((data) {
+          return Text('${data['day']} : ${data['amount']}  ');
+        }).toList(),
       ),
     );
   }
