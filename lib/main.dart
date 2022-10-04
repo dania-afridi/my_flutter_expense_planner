@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, duplicate_ignore, use_key_in_widget_constructors, deprecated_member_use
+import './widgets/chart.dart';
 import 'package:flutter/material.dart';
 import './widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
@@ -50,6 +51,16 @@ class _MyHomePageState extends State<MyHomePage> {
         id: 't2', title: 'Grocery', amount: 357.99, date: DateTime.now()), */
   ];
 
+  List<Transaction> get _recentTransactions {
+    return _userTransaction.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
+
   void _addNewTransaction(String txtitle, double txamount) {
     final newTx = Transaction(
       id: DateTime.now().toString(), //it will work though its not perfect.
@@ -94,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             // ignore: sized_box_for_whitespace
-            Container(
+            /* Container(
               width: double.infinity,
               child: Card(
                 color: Colors.blue,
@@ -102,7 +113,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text('CHART!'),
                 elevation: 5,
               ),
-            ),
+            ), */
+            Chart(_recentTransactions),
             TranscationList(_userTransaction),
           ],
         ),
