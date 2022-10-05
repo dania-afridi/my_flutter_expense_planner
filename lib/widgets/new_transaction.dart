@@ -1,6 +1,7 @@
 // ignore_for_file: sort_child_properties_last, deprecated_member_use, prefer_const_constructors, duplicate_ignore
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addTx;
@@ -15,8 +16,8 @@ class NewTransaction extends StatefulWidget {
 class _NewTransactionState extends State<NewTransaction> {
   //const NewTransaction({super.key});
   final titleController = TextEditingController();
-
   final amountController = TextEditingController();
+  DateTime? selectedDate;
 
   void submitData() {
     final enteredTitle = titleController.text;
@@ -40,7 +41,14 @@ class _NewTransactionState extends State<NewTransaction> {
       initialDate: DateTime.now(),
       firstDate: DateTime(2022),
       lastDate: DateTime.now(),
-    );
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    });
   }
 
   @override
@@ -72,7 +80,13 @@ class _NewTransactionState extends State<NewTransaction> {
                   height: 70,
                   child: Row(
                     children: <Widget>[
-                      Text('No date chosen!'),
+                      Expanded(
+                        child: Text(
+                          selectedDate == null
+                              ? 'No date chosen!'
+                              : 'Picked Date: ${DateFormat.yMd().format(selectedDate!)}',
+                        ),
+                      ),
                       TextButton(
                         onPressed: _presentDatePicker,
                         child: Text(
